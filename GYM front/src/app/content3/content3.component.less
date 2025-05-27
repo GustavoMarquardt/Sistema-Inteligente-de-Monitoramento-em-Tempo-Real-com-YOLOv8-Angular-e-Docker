@@ -1,0 +1,133 @@
+// @font-face {
+//     font-family: 'General Sans';
+//     src: url('/assets/GeneralSans_Complete/Fonts/TTF/GeneralSans-Variable.ttf') format('woff2'),
+//          url('/assets/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Bold.woff') format('woff');
+//     font-weight: normal;
+//     font-style: normal;
+//   }
+  .main-container {
+    display: flex; /* Ativa o flexbox */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh; /* Altura total da tela */
+    width: 70vw; /* Largura total da tela */
+    background-color: #141332; /* Apenas para visualização */
+  }
+  
+  
+  .map-container {
+    position: relative;
+    width: 2000px;  /* Largura da área */
+    height: 2000px; /* Altura da área */
+    background-color: lightgray;
+    border: 1px solid black;
+    overflow: hidden;
+  }
+  
+  .axis-line {
+    position: absolute;
+    background-color: black;
+  }
+  
+  .horizontal-line {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+  }
+  
+  .vertical-line {
+    height: 100%;
+    width: 1px;
+    top: 0;
+    left: 50%;
+  }
+  
+  .draggable-box {
+    position: absolute;
+    width: 25px;  /* Ajuste para a largura do ícone */
+    height: 25px; /* Ajuste para a altura do ícone */
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Ou use a importação do arquivo local da fonte */
+  // @font-face {
+  //   font-family: 'General Sans';
+  //   src: url('../../../assets/GeneralSans_Complete/Fonts/TTF/GeneralSans-Variable.ttf') format('woff2'),
+  //        url('../../../assets/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Bold.woff') format('woff');
+  //   font-weight: normal;
+  //   font-style: normal;
+  // }
+  
+  /* Aplica o plano de fundo #141332 à página inteira e remove margens/paddings padrão */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #141332; /* Cor de fundo geral */
+    font-family: 'General Sans', sans-serif; /* Aplica a fonte Globalmente */
+  }
+  
+  /* Garante que a container ocupe toda a largura da tela */
+  .container-fluid {
+    height: 100%;
+    padding: 0; /* Remove qualquer padding interno da container */
+    margin: 0;  /* Remove margens para garantir que ocupe toda a tela */
+    font-family: 'General Sans', sans-serif; /* Aplica a fonte na container */
+  }
+  
+  /* Colunas */
+  .col-12, .col-md-6 {
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 2%; /* Adiciona padding no topo das colunas */
+    padding-bottom: 2%;
+    font-family: 'General Sans', sans-serif; /* Aplica a fonte nas colunas */
+  }
+  
+  /* Garantir que o conteúdo ocupe 100% da largura da tela */
+  .content-box {
+    background-color: #201d48; /* Cor de fundo da área de conteúdo */
+    height: auto; /* Deixa a altura do conteúdo ajustável de acordo com o conteúdo */
+    border-radius: 25px; /* Adiciona bordas arredondadas */
+    padding: 20px; /* Adiciona padding para o conteúdo */
+    color: white; /* Cor do texto */
+    font-family: 'General Sans', sans-serif; /* Aplica a fonte no conteúdo */
+  }
+  
+  /* Responsividade */
+  @media (max-width: 767px) {
+    .col-12 {
+        width: 100% !important; /* As colunas ocuparão 100% da largura em telas pequenas */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .col-md-6 {
+        width: 50% !important; /* As colunas ocuparão 50% da largura em telas médias ou maiores */
+    }
+  }
+  
+
+  .cute-button {
+    background-color: #06488d; /* Cor de fundo suave */
+    color: white; /* Cor do texto */
+    border-radius: 15px; /* Bordas arredondadas */
+    padding: 5px 10px; /* Espaçamento interno */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: all 0.3s ease; /* Transição suave para os efeitos */
+  }
+  
+  .cute-button:hover {
+    background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+    transform: scale(1.01); /* Leve aumento no tamanho do botão */
+  }
+
+
+  
+  
+
+  

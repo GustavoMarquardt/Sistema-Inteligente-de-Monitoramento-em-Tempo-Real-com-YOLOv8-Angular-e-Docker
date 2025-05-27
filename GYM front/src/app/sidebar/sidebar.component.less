@@ -1,0 +1,168 @@
+/* Configuração básica do layout */
+.dashboard-layout {
+  display: flex; /* Define o layout como flexível */
+  height: 100vh; /* Ocupa toda a altura da viewport */
+  width: 100%;  /* Garante que a largura ocupe 100% da tela */
+  background-color: #6359e9;
+}
+
+/* Quando a sidebar estiver oculta */
+.sidebar-hidden .app-sidebar {
+  display: none; /* Oculta completamente a sidebar */
+}
+
+.sidebar-hidden .main-content {
+  margin-left: 0; /* Remove qualquer margem à esquerda */
+}
+
+/* Barra lateral */
+.app-sidebar {
+  width: 250px;  /* Largura fixa da barra lateral */
+  height: 100vh;  /* Ocupa toda a altura da tela */
+  padding: 20px;
+  color: white;
+  background-color: #201d48; /* Cor fixa para a barra lateral */
+  position: fixed; /* Fixa a barra lateral na tela */
+  top: 0;
+  left: 0;
+  z-index: 100; /* Garante que a barra lateral esteja acima do conteúdo */
+}
+
+/* Aplica a fonte General Sans para todo o conteúdo dentro do ul */
+.app-sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  font-family: 'General Sans', sans-serif;  /* Define a fonte aqui */
+}
+
+.app-sidebar a {
+  color: white;
+  text-decoration: none;
+}
+
+.app-sidebar a.active {
+  font-weight: bold; /* Destaca o link ativo */
+}
+
+.app-sidebar li {
+  margin: 10px 0;
+}
+
+/* Conteúdo principal */
+.main-content {
+  margin-left: 250px;  /* Desloca o conteúdo para a direita para evitar sobrepor a barra lateral */
+  padding: 0px;
+  background-color: #ecf0f1; /* Cor de fundo do conteúdo */
+  min-height: 100vh;  /* Garante que o conteúdo ocupe toda a altura da tela */
+  color: white; /* Cor do texto do conteúdo */
+  overflow: auto; /* Permite rolagem se o conteúdo for maior que a altura */
+  flex: 1; /* O conteúdo principal ocupa o restante do espaço */
+}
+
+/* Estilos para os itens de menu */
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+.menu-item mat-icon {
+  font-size: 24px; /* Ajuste do tamanho do ícone */
+  color: white; /* Define a cor do ícone como branco */
+}
+
+.menu-item a {
+  text-decoration: none;
+  color: white; /* Cor do link */
+  font-size: 16px; /* Tamanho da fonte */
+}
+
+.menu-item button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;  /* Ajuste de padding para dar mais área ao botão */
+  border: none;
+  background-color: transparent;  /* Fundo transparente para o botão */
+  cursor: pointer;  /* Altera o cursor para indicar que é clicável */
+  width: 100%;  /* Faz o botão ocupar toda a largura do item */
+  text-align: left;  /* Alinha o texto à esquerda */
+  transition: background-color 0.3s ease; /* Transição suave para mudança de fundo */
+  border-radius: 15px; /* Bordas arredondadas desde o início */
+  color: white; /* Cor do texto e do ícone do botão */
+}
+
+.menu-item button mat-icon {
+  margin-right: 10px;  /* Espaço entre o ícone e o texto */
+  font-size: 24px;  /* Ajuste o tamanho do ícone conforme necessário */
+  color: white; /* Garante que o ícone seja branco */
+}
+
+.menu-item button a {
+  text-decoration: none;
+  color: inherit; /* Herda a cor do botão */
+  font-size: 16px; /* Tamanho da fonte */
+}
+
+.menu-item button:hover {
+  background-color: #6359e9; /* Cor de fundo quando o botão é hoverado */
+}
+
+.menu-item button:focus {
+  outline: none;  /* Remove o contorno ao focar no botão */
+}
+
+.menu-item button.active {
+  font-weight: bold; /* Deixa o texto em negrito quando ativo */
+  background-color: #007bff; /* Cor de fundo para o botão ativo */
+  color: white; /* Cor do texto no botão ativo */
+}
+
+/* Garantir que o body e o html ocupem 100% da largura e altura da tela */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Layout principal com barra lateral e conteúdo */
+.dashboard-layout {
+  display: flex;
+  height: 100%;
+}
+
+/* Barra lateral com largura fixa */
+.app-sidebar {
+  width: 250px; /* Largura fixa para a barra lateral */
+  background-color: #202144;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Conteúdo principal ocupa o restante da largura */
+.main-content {
+  flex: 1; /* O conteúdo principal ocupa o restante do espaço */
+  background-color: #202144;
+  overflow: auto; /* Permite rolagem se o conteúdo for maior que a altura */
+}
+
+/* Estilo para o menu da barra lateral */
+.menu-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-item {
+  margin: 10px 0;
+}
+
+.menu-item button {
+  width: 100%;
+  text-align: left;
+}
+
+/* Estilo para links ativos */
+.menu-item a.active {
+  color: #ff9800; /* Cor para o link ativo */
+}

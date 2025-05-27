@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Responsivo 100% da Largura</title>
+  <!-- Link para o CSS do Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="main-container" style="background-color: #141332;width: 100%; height: 100%;">
+    <div class="container-fluid" style="margin-left: 3%;">
+      <div class="col-12">
+        <div class="row" id="recepção" style="margin-bottom: 5%;">
+          <div class="content-box"
+            style="background-color: #141332; margin-left: 0%; margin-top: 2%;margin-bottom: 5%;">
+          </div>
+
+          <div class="content-container"
+            style="display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+            <!-- Tabela -->
+            <div class="content-box" style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+              <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSourceCameras" matSort class="full-width-table custom-table">
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">ID</th>
+                    <td mat-cell *matCellDef="let camera" style="color: white; background-color: #141332;">{{ camera.id
+                      }}</td>
+                  </ng-container>
+
+                  <!-- Z Column -->
+                  <ng-container matColumnDef="z">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Altura (m)</th>
+                    <td mat-cell *matCellDef="let camera" style="color: white; background-color: #141332;">{{
+                      camera.z/10 }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="x">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Posição em X (m)</th>
+                    <td mat-cell *matCellDef="let camera" style="color: white; background-color: #141332;">{{
+                      camera.x/10 }}</td>
+                  </ng-container>
+
+                  <!-- Y Column -->
+                  <ng-container matColumnDef="y">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Posição em Y(m)</th>
+                    <td mat-cell *matCellDef="let camera" style="color: white; background-color: #141332;">{{
+                      camera.y/10 }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="rotationY">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Rotação Y</th>
+                    <td mat-cell *matCellDef="let camera" style="color: white; background-color: #141332;">{{
+                      camera.rotationY }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="rede">
+                    <th mat-header-cell *matHeaderCellDef style="color: white; background-color: #141332;">IP</th>
+                    <td mat-cell *matCellDef="let elemento" style="color: white; background-color: #141332;">
+                      <button mat-button color="warn" (click)="openCameraDialog(elemento)"
+                        *ngIf="getNivelAcesso() === '1'"
+                        style="background-color: transparent; border: none;" class="cute-button">
+                        
+                        <!-- Condicional para escolher o ícone -->
+                        <mat-icon *ngIf="isCameraConfigIncomplete(elemento)" style="color: red;">warning</mat-icon>
+                        <mat-icon *ngIf="!isCameraConfigIncomplete(elemento)" style="color: white;">network_wifi</mat-icon>
+                        
+                      </button>
+                    </td>
+                  </ng-container>
+
+
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="color: white; background-color: #141332;">Ações</th>
+                    <td mat-cell *matCellDef="let camera" style="color: white; background-color: #141332;">
+                      <button mat-button color="warn" (click)="deleteCameraById(camera.id)"
+                      *ngIf="getNivelAcesso() === '1'"
+                        style="background-color: transparent; border: none;" class="cute-button">
+                        <mat-icon style="color: white;">delete</mat-icon> <!-- ícone de lixo -->
+                      </button>
+                    </td>
+                  </ng-container>
+
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsCameras"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsCameras;"></tr>
+                </table>
+                <mat-paginator #paginatorCamera [length]="totalItemsCameras" [pageSize]="10"
+                  (page)="onPageChangeCamera($event)" class="custom-table">
+                </mat-paginator>
+              </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="content-box" *ngIf="getNivelAcesso() === '1'"
+              style="background-color: #201d48; padding: 20px; border-radius: 8px; max-width: 300px; flex: 1; min-width: 300px; color: white;">
+              <form [formGroup]="cameraForm" (ngSubmit)="onSubmit()">
+                <h2>Cadastro de Câmera</h2>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Altura (m)</mat-label>
+                  <input matInput formControlName="z" placeholder="Insira a altura (Z)" type="number">
+                  <mat-error *ngIf="cameraForm.get('z')?.invalid">A altura é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Campo de Visão (FOV)</mat-label>
+                  <input matInput formControlName="fov" placeholder="Insira o campo de visão" type="number">
+                  <mat-error *ngIf="cameraForm.get('fov')?.invalid">O FOV é obrigatório</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Alcance (m)</mat-label>
+                  <input matInput formControlName="alcance" placeholder="Insira o alcance" type="number">
+                  <mat-error *ngIf="cameraForm.get('alcance')?.invalid">O alcance é obrigatório</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Posição X (m)</mat-label>
+                  <input matInput formControlName="x" placeholder="Insira a posição X" type="number">
+                  <mat-error *ngIf="cameraForm.get('x')?.invalid">A posição X é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Posição Y (m)</mat-label>
+                  <input matInput formControlName="y" placeholder="Insira a posição Y" type="number">
+                  <mat-error *ngIf="cameraForm.get('y')?.invalid">A posição Y é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Rotação Y</mat-label>
+                  <input matInput formControlName="rotationY" placeholder="Insira a rotação Y" type="number">
+                </mat-form-field>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                  <button mat-button color="primary" type="submit" [disabled]="cameraForm.invalid" class="cute-button">
+                    Cadastrar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="content-container"
+            style="display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap; margin-top: 5%;">
+            <!-- Tabela -->
+            <div class="content-box" style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+              <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSourceAparelhos" matSort class="full-width-table custom-table">
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">ID</th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      {{ aparelho?.id }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="nome_equipamento">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Nome</th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      {{ aparelho?.nome_equipamento }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="divisao">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Grupo muscular</th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      {{ aparelho?.divisao }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="cameraId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="color: white; background-color: #141332;">
+                      Câmera responsável
+                    </th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      <!-- Alterna entre visualização e edição -->
+                      <ng-container *ngIf="!isEditing[aparelho.id]; else editMode">
+                        <span (click)="toggleEdit(aparelho)">{{ aparelho.cameraId || 'Clique para editar' }}</span>
+                      </ng-container>
+                  
+                      <!-- Template para o modo de edição -->
+                      <ng-template #editMode>
+                        <mat-form-field appearance="fill">
+                          <mat-label>Selecione a Câmera</mat-label>
+                          <mat-select [(ngModel)]="aparelho.cameraId" (selectionChange)="onCameraSelect($event, aparelho)">
+                            <mat-option *ngFor="let camera of ListaDeCameras" [value]="camera.id">
+                              {{ camera.id }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <button mat-icon-button (click)="saveCamera(aparelho)">
+                          <mat-icon>check</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="cancelEdit(aparelho)">
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </ng-template>
+                    </td>
+                  </ng-container>
+                  
+                  
+                  
+
+                  <ng-container matColumnDef="x">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Posição em X (m)</th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      {{ aparelho?.x | number:'1.0-0' }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="y">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                      style="color: white; background-color: #141332;">Posição em Y (m)</th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      {{ aparelho?.y | number:'1.0-0' }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="color: white; background-color: #141332;">Ações</th>
+                    <td mat-cell *matCellDef="let aparelho" style="color: white; background-color: #141332;">
+                      <button mat-button color="warn" (click)="deleteAparelhoById(aparelho?.id)"
+                      style="background-color: transparent; border: none;" class="cute-button"
+                      *ngIf="getNivelAcesso() === '1'">
+                      <mat-icon style="color: white;">delete</mat-icon> <!-- ícone de lixo -->
+                    </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsAparelhos"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsAparelhos;"></tr>
+                </table>
+
+                <mat-paginator #paginatorAparelho [length]="totalItemsAparelho" [pageSize]="10"
+                  (page)="onPageChangeAparelho($event)" class="custom-table">
+                </mat-paginator>
+
+              </div>
+            </div>
+            <div class="content-box" class="content-box" *ngIf="getNivelAcesso() === '1'"
+              style="background-color: #201d48; padding: 20px; border-radius: 8px; max-width: 300px; flex: 1; min-width: 300px; color: white;">
+              <form [formGroup]="aparelhoForm" (ngSubmit)="onSubmitAparelho()">
+                <h2>Cadastro de Aparelho</h2>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Nome</mat-label>
+                  <input matInput formControlName="nome_equipamento" placeholder="Insira o nome" type="text">
+                  <mat-error *ngIf="aparelhoForm.get('nome_equipamento')?.invalid">O nome é obrigatório</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Data de Aquisição</mat-label>
+                  <input matInput formControlName="data_aquisicao" placeholder="Insira a data de aquisição" type="date">
+                  <mat-error *ngIf="aparelhoForm.get('data_aquisicao')?.invalid">
+                    A data de aquisição é obrigatória
+                  </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Altura (m)</mat-label>
+                  <input matInput formControlName="altura" placeholder="Insira a altura" type="number"
+                    (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                  <mat-error *ngIf="aparelhoForm.get('altura')?.invalid">A altura é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Largura (m)</mat-label>
+                  <input matInput formControlName="largura" placeholder="Insira a largura" type="number"
+                    (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                  <mat-error *ngIf="aparelhoForm.get('largura')?.invalid">A largura é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Profundidade (m)</mat-label>
+                  <input matInput formControlName="profundidade" placeholder="Insira a profundidade" type="number"
+                    (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                  <mat-error *ngIf="aparelhoForm.get('profundidade')?.invalid">A profundidade é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Posição X (m)</mat-label>
+                  <input matInput formControlName="x" placeholder="Insira a posição X" type="number"
+                    (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                  <mat-error *ngIf="aparelhoForm.get('x')?.invalid">A posição X é obrigatória</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Posição Y (m)</mat-label>
+                  <input matInput formControlName="y" placeholder="Insira a posição Y" type="number"
+                    (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                  <mat-error *ngIf="aparelhoForm.get('y')?.invalid">A posição Y é obrigatória</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                  <mat-label>Divisão do Treino</mat-label>
+                  <mat-select formControlName="divisao">
+                    <mat-option *ngFor="let divisao of divisoesCorpo" [value]="divisao">
+                      {{ divisao }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="aparelhoForm.get('divisao')?.invalid">
+                    A divisão do treino é obrigatória
+                  </mat-error>
+                </mat-form-field>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <h4 style="color: white; font-size: small; margin: 0;">É uma parede?</h4>
+                    <mat-checkbox formControlName="isParede" style="color: white;"></mat-checkbox>
+                  </div>
+
+                  <button mat-button color="primary" type="submit" [disabled]="aparelhoForm.invalid"
+                    class="cute-button">
+                    Cadastrar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+          <!-- Primeira coluna com o mapa e a câmera -->
+          <div class="content-box" style="margin-top: 5%;">
+            <div class="col-12">
+              <div style="display: flex; gap: 20px;" class="content-box" *ngIf="getNivelAcesso() === '1'">
+                <!-- Seção da academia -->
+                <div style="background-color: #141332; flex: 1; padding: 10px; border-radius: 8px;">
+                  <h4>Mapa da Academia</h4>
+                  <p>Largura: ({{ mapWidthMeters }} m)</p>
+                  <p>Profundidade: ({{ mapHeightMeters }} m)</p>
+                  <div>
+                    <button mat-raised-button class="cute-button" color="primary" (click)="salvarCameras()">Salvar
+                      Câmeras</button>
+                      <button mat-raised-button class="cute-button" style="margin-left: 20px; margin-top: 20px;"
+                      (click)="atualizarCameras()">Atualizar Câmeras</button>
+                    <!-- <button mat-raised-button (click)="gerarCameras()">Gerar Câmeras</button> -->
+                    <button mat-raised-button class="cute-button" style="margin-left: 20px;"
+                      (click)="gerarAparelhos()">Gerar Aparelhos</button>
+                    <button mat-raised-button class="cute-button" style="margin-left: 20px;"
+                      (click)="removerCamerasRedundantes()">Otimizar</button>
+                    <button mat-raised-button class="cute-button" style="margin-left: 20px;"
+                      (click)="atualizarAparelhosComNovasCameras()">Salvar relação</button>
+                      <button mat-raised-button class="cute-button" style="margin-left: 20px; margin-top: 20px;"
+                      (click)="adicionarCamera()">Adicionar camera</button>
+                  </div>
+
+                  <div style="margin-top: 10px;">
+                    <mat-slider min="0" max="360" step="1" showTickMarks discrete [displayWith]="formatLabel"
+                      (change)="onSliderChange()">
+                      <input matSliderThumb>
+                    </mat-slider>
+                    <ng-container *ngIf="editandoCamera; else noCameraSelected">
+                      <span style="display: flex; align-items: center;">
+                        <mat-icon>camera_alt</mat-icon>
+                        Câmera Selecionada: {{ editandoCamera }}
+                      </span>
+                    </ng-container>
+                    <ng-template #noCameraSelected>
+                      <span style="display: flex; align-items: center;">
+                        <mat-icon>camera_off</mat-icon>
+                        Nenhuma câmera selecionada
+                      </span>
+                    </ng-template>
+                  </div>
+
+                  <ul>
+                    <li *ngFor="let camera of ListaDeCameras">
+                      Câmera ID: {{ camera.id }} - Posição: ({{ camera.x }}, {{ camera.y }})
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Seção do formulário -->
+                <div style="background-color: #141332; flex: 1; padding: 10px; border-radius: 8px;">
+                  <h4>Valores para gerar as cameras</h4>
+                  <form [formGroup]="typerCamera" (ngSubmit)="gerarCameras()">
+
+                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                      <mat-label>Altura (m)</mat-label>
+                      <input matInput formControlName="altura" placeholder="Insira a altura" type="number"
+                        (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                      <mat-error *ngIf="typerCamera.get('altura')?.invalid">A altura é obrigatória</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                      <mat-label>FOV</mat-label>
+                      <input matInput formControlName="fov" placeholder="Insira a FOV" type="number"
+                        (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                      <mat-error *ngIf="typerCamera.get('FOV')?.invalid">A FOV é obrigatória</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                      <mat-label>Alcance (m)</mat-label>
+                      <input matInput formControlName="alcance" placeholder="Insira a alcance" type="number"
+                        (keypress)="allowOnlyNumbersAndDot($event)" (paste)="blockInvalidPaste($event)">
+                      <mat-error *ngIf="typerCamera.get('alcance')?.invalid">A alcance é obrigatória</mat-error>
+                    </mat-form-field>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                      <button mat-button color="primary" type="submit" [disabled]="typerCamera.invalid"
+                        class="cute-button">
+                        Gerar posições
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="map-container" [ngStyle]="{'width.px': mapWidthPx, 'height.px': mapHeightPx}"
+                style="margin: 10px;">
+                <!-- Exibição da projeção da câmera -->
+                <svg width="100%" height="100%">
+                </svg>
+
+                <div class="map-container" #mapContainer>
+                  <svg width="100%" height="100%">
+                    <!-- Traça uma linha para cada ponto -->
+                    <g *ngFor="let cameraCorners of ListaDeCamerasCorners">
+                      <!-- Renderiza os pontos associados à câmera -->
+                      <g *ngFor="let ponto of pontosExibidos">
+                        <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="5" fill="red" />
+                      </g>
+                    </g>
+
+                    <!-- Renderiza um triângulo para cada conjunto de pontos -->
+                    <g *ngFor="let campoVisao of ListaDeCampoDeVisaoCamera">
+                      <polygon [attr.points]="getPointsForTriangle(campoVisao.pontos)" fill="rgba(0, 0, 255, 0.1)"
+                        stroke="black" stroke-width="1">
+                      </polygon>
+                    </g>
+
+                  </svg>
+
+                  <!-- Div com câmeras -->
+                  <div class="draggable-box" *ngFor="let camera of ListaDeCameras"
+                    [style.left.px]="camera.x * scaleFactor" [style.top.px]="camera.y * scaleFactor"
+                    (mousedown)="checkPermissionAndStartDragCamera($event, camera)"
+                    [ngStyle]="{ transform: 'rotate(' + camera.rotationY + 'deg)' }">
+                    <h1 style="color: #f700ff;font-size: larger; margin: 5%;"> {{camera.id}}</h1>
+                  </div>
+
+                  <!-- Div com aparelhos -->
+                  <div *ngFor="let aparelho of ListaDeAparelhos" class="draggable-aparelho"
+                    [ngStyle]="{'background-color': aparelho.cameraId === 0 ? 'pink' : 'aqua'}"
+                    [style.left.px]="aparelho.x * scaleFactor" [style.top.px]="aparelho.y * scaleFactor"
+                    [style.width.px]="aparelho.largura * scaleFactor"
+                    [style.height.px]="aparelho.profundidade * scaleFactor"
+                    (mousedown)="checkPermissionAndStartDragAparelho($event, aparelho)">
+                    <h1 style="color: #000;font-size:larger"> {{aparelho.id}}</h1>
+                  </div>
+                </div>
+
+              </div>
+
+              <mat-card-content *ngIf="mostrarProgresso">
+                <h2 class="example-h2">Gerando camera</h2>
+
+                <section class="example-section">
+                  <mat-progress-bar class="example-margin" [mode]="'determinate'" [value]="progressoCameras"
+                    [bufferValue]="bufferValue">
+                  </mat-progress-bar>
+                </section>
+              </mat-card-content>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link para o JavaScript do Bootstrap (opcional para interatividade) -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+</body>
+
+
+
+</html>

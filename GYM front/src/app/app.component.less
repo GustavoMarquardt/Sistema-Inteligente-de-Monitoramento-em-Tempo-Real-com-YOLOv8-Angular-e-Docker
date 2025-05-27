@@ -1,0 +1,36 @@
+.dashboard-layout {
+    display: flex; /* Alinha a sidebar e o conteúdo lado a lado */
+    height: 100vh; /* Ocupa toda a altura da tela */
+    overflow: hidden; /* Previne rolagem indesejada */
+  }
+  
+  .app-sidebar {
+    width: 250px; /* Largura fixa para a sidebar */
+    background-color: #333; /* Cor de fundo da sidebar (personalize conforme necessário) */
+    color: white; /* Cor do texto na sidebar */
+    position: fixed; /* Fixa a sidebar à esquerda */
+    height: 100%; /* Sidebar ocupa toda a altura da tela */
+    z-index: 100; /* Garante que a sidebar fique acima do conteúdo */
+  }
+  
+  .main-content {
+    margin-left: 250px; /* Deixa espaço para a sidebar */
+    padding: 20px; /* Adiciona padding ao conteúdo */
+    padding-right: 0%; /* Remove o padding direito para evitar rolagem horizontal */
+    padding-bottom: 0%; /* Remove o padding inferior para evitar rolagem vertical */
+    padding-top: 0%; /* Remove o padding superior para evitar rolagem vertical */
+    flex-grow: 1; /* Permite que o conteúdo ocupe o restante do espaço */
+    background-color: #141332; /* Cor de fundo do conteúdo */
+    overflow-y: auto; /* Permite rolagem no conteúdo se necessário */
+  }
+  
+  .main-content.no-margin {
+    margin-left: 0 !important;
+  }
+  
+  /* Quando a sidebar estiver oculta */
+  .sidebar-hidden .app-sidebar {
+    display: none;
+  }
+  
+  

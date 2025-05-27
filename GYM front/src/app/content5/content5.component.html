@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar academias</title>
+    <!-- Link para o CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main-container" style="background-color: #141332;width: 100%; height: 100%;">
+        <div class="container-fluid" style="margin-left: 3%;">
+            <div class="col-12">
+                <div class="row" id="recepção">
+                    <div class="content-box" style="background-color: #141332; margin-left: 1%; margin-top: 2%;">
+                        <h1>Gerencia de academias</h1>
+                    </div>
+
+                    <div class="content-container"
+                        style="display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap; max-width: 1200px;">
+                        <!-- Tabela -->
+                        <div class="content-box"
+                            style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+                            <div class="mat-elevation-z8">
+                                <form [formGroup]="academiaForm" (ngSubmit)="OnsubmitAcademia()">
+                                    <h2>Cadastro de academia</h2>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>Nome</mat-label>
+                                        <input matInput formControlName="nome" placeholder="Insira o nome" type="nome">
+                                        <mat-error *ngIf="academiaForm.get('nome')?.invalid">O nome é
+                                            obrigatório</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>largura (m)</mat-label>
+                                        <input matInput formControlName="width" placeholder="Insira a largura"
+                                            type="number">
+                                        <mat-error *ngIf="academiaForm.get('width')?.invalid">A largura é
+                                            obrigatória</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>Profundidade (m)</mat-label>
+                                        <input matInput formControlName="height" placeholder="Insira a height"
+                                            type="number">
+                                        <mat-error *ngIf="academiaForm.get('height')?.invalid">A height é
+                                            obrigatório</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>altura (m) </mat-label>
+                                        <input matInput formControlName="altura" placeholder="Insira a altura"
+                                            type="number">
+                                        <mat-error *ngIf="academiaForm.get('altura')?.invalid">A altura é
+                                            obrigatória</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>endereco</mat-label>
+                                        <input matInput formControlName="endereco" placeholder="Insira o endereco"
+                                            type="string">
+                                        <mat-error *ngIf="academiaForm.get('endereco')?.invalid">O endereco é
+                                            obrigatório</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>IP</mat-label>
+                                        <input matInput formControlName="ip_publico_academia" placeholder="Insira o IP"
+                                            type="string">
+                                        <mat-error *ngIf="academiaForm.get('ip_publico_academia')?.invalid">O IP é
+                                            obrigatório</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>Port</mat-label>
+                                        <input matInput formControlName="port" placeholder="Insira a port"
+                                            type="string">
+                                        <mat-error *ngIf="academiaForm.get('port')?.invalid">A port é
+                                            obrigatória</mat-error>
+                                    </mat-form-field>
+
+
+                                    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 10px;">
+                                        <mat-label>Número de telefone</mat-label>
+                                        <input matInput formControlName="numeroTelefone"
+                                            placeholder="Insira a numeroTelefone" type="string">
+                                        <mat-error *ngIf="academiaForm.get('numeroTelefone')?.invalid">O numero de
+                                            telefone é
+                                            obrigatória</mat-error>
+                                    </mat-form-field>
+
+
+                                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                                        <button mat-button color="primary" type="submit"
+                                            [disabled]="academiaForm.invalid" class="cute-button">
+                                            Cadastrar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Tabela -->
+                        <div class="content-container"
+                            style="display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap; margin-top: 5%;">
+                            <!-- Tabela -->
+                            <div class="content-box"
+                                style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+                                <div class="mat-elevation-z8">
+                                    <table mat-table [dataSource]="dataSourceAcademias" matSort
+                                        class="full-width-table custom-table">
+                                        <!-- ID Column -->
+                                        <ng-container matColumnDef="id">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">ID</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.id }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="nome">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">Nome</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.nome }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="width">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">Largura</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.width }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="height">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">Profundidade</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.height }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="altura">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">Altura</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.altura | number:'1.0-0' }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="endereco">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">Endereço</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.endereco }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="ip_publico_academia">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">IP</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.ip_publico_academia }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="port">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">PORT</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.port }}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="numeroTelefone">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="color: white; background-color: #141332;">Telefone</th>
+                                            <td mat-cell *matCellDef="let academia"
+                                                style="color: white; background-color: #141332;">
+                                                {{ academia?.numeroTelefone }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef style="color: white; background-color: #141332;">Ações</th>
+                                            <td mat-cell *matCellDef="let academia" style="color: white; background-color: #141332;">
+                                              <button mat-button color="warn"
+                                                      style="background-color: transparent; border: none;"
+                                                      class="cute-button"
+                                                      (click)="openAcademiaDialog(academia.id,$event)">
+                                                <mat-icon style="color: white;">search</mat-icon>
+                                                <!-- ícone de lixo -->
+                                              </button>
+                                            </td>
+                                          </ng-container>
+                                          
+                                          <tr mat-header-row *matHeaderRowDef="displayedColumnsAcademia"></tr>
+                                          <tr mat-row *matRowDef="let row; columns: displayedColumnsAcademia;"
+                                              (click)="onRowClick(row.id)" style="cursor: pointer;"></tr>
+                                    </table>
+
+                                    <mat-paginator #paginatorAparelho [length]="totalItemAcademias" [pageSize]="10"
+                                        (page)="onPageChangeAcademias($event)" class="custom-table">
+                                    </mat-paginator>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link para o JavaScript do Bootstrap (opcional para interatividade) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+</body>
+
+
+
+</html>

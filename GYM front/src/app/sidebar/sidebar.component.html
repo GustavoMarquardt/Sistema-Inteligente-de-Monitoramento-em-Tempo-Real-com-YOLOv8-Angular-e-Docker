@@ -1,0 +1,55 @@
+<div class="dashboard-layout" [class.sidebar-hidden]="!mostrarSidebar">
+  <div class="app-sidebar" *ngIf="mostrarSidebar">
+    <img src="gymia512.png" alt="GYMia" style="width: 100%; height: auto">
+
+    <ul class="menu-list">
+      <li *ngFor="let permissao of permissoes" class="menu-item">
+        <button mat-button *ngIf="permissao === 'dashboard'">
+          <mat-icon>dashboard</mat-icon>
+          <a routerLink="/content1" routerLinkActive="active">Dashboard</a>
+        </button>
+      </li>
+
+      <li *ngFor="let permissao of permissoes" class="menu-item">
+        <button mat-button *ngIf="permissao === 'mapa'">
+          <mat-icon>layers</mat-icon>
+          <a routerLink="/content2" routerLinkActive="active">Mapeamento</a>
+        </button>
+      </li>
+
+      <li *ngFor="let permissao of permissoes" class="menu-item">
+        <button mat-button *ngIf="permissao === 'monitoramento'">
+          <mat-icon>photo_camera</mat-icon>
+          <a routerLink="/content4" routerLinkActive="active">Monitoramento</a>
+        </button>
+      </li>
+
+      <li *ngFor="let permissao of permissoes" class="menu-item">
+        <button mat-button *ngIf="permissao === 'academias'">
+          <mat-icon>add_home_work</mat-icon>
+          <a routerLink="/content5" routerLinkActive="active">Academias</a>
+        </button>
+      </li>
+
+
+      <li *ngFor="let permissao of permissoes" class="menu-item">
+        <button mat-button *ngIf="permissao === 'simulacao'">
+          <mat-icon>lock</mat-icon>
+          <a routerLink="/content3" routerLinkActive="active">Simulação</a>
+        </button>
+      </li>
+
+      <li *ngFor="let permissao of permissoes" class="menu-item">
+        <button mat-button *ngIf="permissao === 'logout'" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          Logout
+        </button>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- <div class="main-content">
+    <router-outlet></router-outlet>
+  </div> -->
+</div>

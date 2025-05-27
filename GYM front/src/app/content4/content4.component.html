@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar academias</title>
+    <!-- Link para o CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main-container" style="background-color: #141332;width: 100%; height: 100%;">
+        <div class="container-fluid" style="margin-left: 3%;">
+            <div class="col-12">
+                <div class="row" id="recepção">
+                    <div class="content-box" style="background-color: #141332; margin-left: 1%; margin-top: 2%;">
+                        <h1>ROI'S</h1>
+                    </div>
+
+                    <div class="content-container"
+                        style="display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+
+                        <div class="content-box"
+                            style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+                            <h4>selecione a camera para gerar os ROI's</h4>
+                            <div class="mat-elevation-z8">
+
+                                <table mat-table [dataSource]="dataSourceCameras" matSort
+                                    class="full-width-table custom-table">
+                                    <!-- ID Column -->
+                                    <ng-container matColumnDef="id">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            style="color: white; background-color: #141332;">ID</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;">{{ camera.id
+                                            }}</td>
+                                    </ng-container>
+
+                                    <!-- Z Column -->
+                                    <ng-container matColumnDef="z">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            style="color: white; background-color: #141332;">Altura (m)</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;">{{
+                                            camera.z/10 }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="x">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            style="color: white; background-color: #141332;">Posição em X (m)</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;">{{
+                                            camera.x/10 }}</td>
+                                    </ng-container>
+
+                                    <!-- Y Column -->
+                                    <ng-container matColumnDef="y">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            style="color: white; background-color: #141332;">Posição em Y(m)</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;">{{
+                                            camera.y/10 }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="rotationY">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rotação Y</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;">{{
+                                            camera.rotationY }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="porcentagemComRoi">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            style="color: white; background-color: #141332;">ROI feitos</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;"> {{
+                                            camera.porcentagemComRoi }}% </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef
+                                            style="color: white; background-color: #141332;">Aparelhos</th>
+                                        <td mat-cell *matCellDef="let camera"
+                                            style="color: white; background-color: #141332;">
+                                            <button mat-button color="warn" (click)="makeRois(camera.id)"
+                                                style="background-color: transparent; border: none;"
+                                                class="cute-button">
+                                                <mat-icon style="color: white;">view_in_ar</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCameras"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsCameras;"></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="content-box"
+                    style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+                    <h4>selecione o aparelho para gerar o ROI</h4>
+                    <div class="mat-elevation-z8">
+                        <table mat-table [dataSource]="dataSourceObject" matSort class="full-width-table custom-table">
+                            <!-- ID Column -->
+                            <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">ID</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.id }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nome_equipamento">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">Nome</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.nome_equipamento }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="divisao">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">Grupo muscular</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.divisao }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cameraId">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">Camera responsável</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.cameraId }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="x">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">Posição em X (m)</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.x | number:'1.0-0' }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="y">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">Posição em Y (m)</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.y | number:'1.0-0' }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef style="color: white; background-color: #141332;">
+                                    Ações</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    <button mat-button color="warn" style="background-color: transparent; border: none;"
+                                        class="cute-button">
+                                        <mat-icon style="color: white;">delete</mat-icon> <!-- ícone de lixo -->
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <!-- Tem ROI -->
+                            <ng-container matColumnDef="temRoi">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    style="color: white; background-color: #141332;">ROI feitos</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    {{ aparelho?.temRoi }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="delete">
+                                <th mat-header-cell *matHeaderCellDef style="color: white; background-color: #141332;">
+                                    Apagar ROI</th>
+                                <td mat-cell *matCellDef="let aparelho"
+                                    style="color: white; background-color: #141332;">
+                                    <button mat-button color="warn" style="background-color: transparent; border: none;"
+                                        class="cute-button" (click)="deleteRoi($event,aparelho?.id)">
+                                        <mat-icon style="color: white;">delete</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsObject"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsObject;"
+                                (click)="onRowClick(row.id, row.cameraId)"></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="content-box"
+                    style="background-color: #201d48; margin-bottom: 5%; flex: 1; min-width: 300px;">
+                    <h4 *ngIf="makingROIaparelhoID; else noSelection">
+                        Gerando ROI para {{ makingROIaparelhoID }} com a câmera {{ makingROIcameraID }}
+                    </h4>
+                    <ng-template #noSelection>
+                        <h4 style="color: white;">Por favor, selecione um aparelho.</h4>
+                    </ng-template>
+
+                    <div class="imagem-container" *ngIf="makingROIaparelhoID && imageUrl">
+                        <!-- Exibe a nova imagem gerada a partir do Blob -->
+                        <img #imageRef [src]="imageUrl" alt="GYMia"
+                             style="width: 100%; height: 100%; position: relative;"
+                             (click)="onImageClick($event, imageRef)">
+                      
+                        <!-- Renderiza os pontos -->
+                        <div *ngIf="pontos!.length > 0">
+                          <div *ngFor="let ponto of pontos" class="ponto"
+                               [style.left.px]="(ponto.x / imageRef.naturalWidth) * imageRef.clientWidth"
+                               [style.top.px]="(ponto.y / imageRef.naturalHeight) * imageRef.clientHeight">
+                            <span>{{ ponto.x.toFixed(2) }}, {{ ponto.y.toFixed(2) }}</span>
+                          </div>
+                        </div>
+                      
+                        <!-- Renderiza o polígono ligando os 4 pontos -->
+                        <div *ngIf="pontos?.length === 4" class="poligono-container">
+                          <div class="poligono-borda" [style.clip-path]="getClipPath(imageRef)"></div>
+                          <div class="poligono" [style.clip-path]="getClipPath(imageRef)"></div>
+                        </div>
+                      
+                        <!-- Renderiza os pontos e os polígonos da lista de ROIs -->
+                        <div *ngIf="listaDeROIsOtherObject!.length > 0">
+                          <div *ngFor="let roi of listaDeROIsOtherObject" class="poligono-container">
+                            <!-- Renderiza os pontos do ROI -->
+                            <div *ngFor="let ponto of roi.pontos" class="ponto"
+                                 [style.left.px]="(ponto.x / imageRef.naturalWidth) * imageRef.clientWidth"
+                                 [style.top.px]="(ponto.y / imageRef.naturalHeight) * imageRef.clientHeight">
+                              <span>{{ ponto.x.toFixed(2) }}, {{ ponto.y.toFixed(2) }}</span>
+                            </div>
+                      
+                            <!-- Renderiza o polígono baseado nos 4 pontos -->
+                            <div *ngIf="roi.pontos?.length === 4">
+                              <div class="poligono-borda-lista" [style.clip-path]="getClipPathFromROI(roi.pontos, imageRef)"></div>
+                              <div class="poligono-lista" [style.clip-path]="getClipPathFromROI(roi.pontos, imageRef)"></div>
+                            </div>
+                          </div>
+                        </div>
+                      
+                        <h4 style="margin-top:2%;">Clique no botão para selecionar a ferramenta</h4>
+                      </div>
+                      
+                    
+
+                    <div class="ferramentas" *ngIf="makingROIaparelhoID"
+                        style="margin-top: 2%; display: flex; gap: 1rem;">
+                        <button class="cute-button" (click)="selecionarFerramenta('adicionar')"
+                            [class.active]="ferramentaSelecionada === 'adicionar'">
+                            Ferramente de adição
+                        </button>
+                        <button class="cute-button" (click)="selecionarFerramenta('remover')"
+                            [class.active]="ferramentaSelecionada === 'remover'">
+                            Ferramente de remoção
+                        </button>
+
+                        <!-- Botão que aparece somente quando houver 4 pontos -->
+                        <button class="cute-button" *ngIf="pontos.length === 4" (click)="confirmarPontos()">
+                            Confirmar ROI
+                        </button>
+                    </div>
+
+
+                </div>
+                <div class="map-container" #mapContainer [style.width.px]="mapWidthPx" [style.height.px]="mapHeightPx">
+                    <svg width="100%" height="100%">
+                        <g *ngFor="let campoVisao of ListaDeCampoDeVisaoCamera">
+                            <polygon [attr.points]="getPointsForTriangle(campoVisao.pontos)"
+                                [attr.fill]="campoVisao.id === makingROIcameraID ? 'rgba(128, 0, 128, 0.7)' : 'rgba(0, 0, 255, 0.1)'"
+                                stroke="black" stroke-width="1">
+                            </polygon>
+                        </g>
+                    </svg>
+
+                    <!-- Div com aparelhos -->
+                    <div class="draggable-box" *ngFor="let camera of ListaDeCameras"
+                        [style.left.px]="camera.x * scaleFactor" [style.top.px]="camera.y * scaleFactor"
+                        [ngStyle]="{ transform: 'rotate(' + camera.rotationY + 'deg)' }">
+                        <h1 style="color: #f700ff;font-size: larger; margin: 5%;"> {{camera.id}}</h1>
+                    </div>
+
+                    <div *ngFor="let aparelho of ListaDeTodosOsObjetosMapa" class="draggable-aparelho" [ngStyle]="{
+                      'background-color': aparelho.cameraId === 0 ? 'pink' : 'aqua',
+                      'opacity': aparelho.id === makingROIaparelhoID ? 1 : 0.5
+                    }" [style.left.px]="aparelho.x * scaleFactor" [style.top.px]="aparelho.y * scaleFactor"
+                        [style.width.px]="aparelho.largura * scaleFactor"
+                        [style.height.px]="aparelho.profundidade * scaleFactor">
+                        <h1 style="color: #000; font-size: larger;">{{aparelho.id}}</h1>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link para o JavaScript do Bootstrap (opcional para interatividade) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+</body>
+
+
+
+</html>
