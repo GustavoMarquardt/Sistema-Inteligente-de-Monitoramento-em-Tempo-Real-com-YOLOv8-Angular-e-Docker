@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "gymia_mobile_web",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "debug",
+        "args": [
+          "--web-port=52493"
+        ],
+        "webLaunchUrl": "http://localhost:52493"
+      },
+      {
+        "name": "gymia_mobile (release mode)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "release"
+      }
+    ]
+  }
+  

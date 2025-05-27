@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./GYM Back_end
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: sasukeNaruto
+      DB_NAME: gym
+    ports:
+      - "3000:3000"
+    networks:
+      - gym-network
+    depends_on:
+      - db
+    volumes:
+      - ./GYM Back_end/wait-for-it.sh:/wait-for-it.sh
+    entrypoint: ["/wait-for-it.sh", "db:3306", "--", "npm", "start"]
+    container_name: gymia-backend-1
+
+  db:
+    image: mysql:8
+    container_name: gymia-db-1
+    environment:
+      MYSQL_ROOT_PASSWORD: sasukeNaruto
+    ports:
+      - "3306:3306"
+    networks:
+      - gym-network
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistência dos dados do MySQL
+
+  frontend:
+    build:
+      context: ./GYM front  # Caminho para a pasta do front-end
+    ports:
+      - "4200:4200"  # Mapeia a porta 4200 do container para a 4200 da máquina host
+    networks:
+      - gym-network
+    depends_on:
+      - backend  # Garante que o back-end esteja pronto antes de iniciar o front-end
+    container_name: gymia-front-1
+
+  model:
+    build:
+      context: ./GYM modelo
+      dockerfile: Dockerfile  # Certifique-se que o nome seja exatamente "Dockerfile"
+    ports:
+      - "4300:4300"  # Mapeia a porta 4200 do container para a 4200 da máquina host  
+    networks:
+      - gym-network
+    depends_on:
+      - db
+    command: ["python", "./codigos/modelo_on_cams.py"]
+    container_name: gymia-modeloIA-1
+    
+networks:
+  gym-network:
+    driver: bridge
+
+volumes:
+  mysql_data:  # Definindo o volume persistente para o MySQL
+    driver: local
