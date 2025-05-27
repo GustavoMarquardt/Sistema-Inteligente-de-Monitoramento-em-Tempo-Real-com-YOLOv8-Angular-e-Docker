@@ -23,6 +23,7 @@ Todos os serviços do sistema são containerizados utilizando Docker, garantindo
 
 - **YOLOv8m**: Algoritmo de detecção de objetos em tempo real.
 - **Python**: Backend para processamento e integração.
+- **Flutter**: Framework mobile para a invertace do usuário. 
 - **Angular**: Framework front-end para a interface do usuário.
 - **Docker**: Containerização dos serviços.
 - **APIs RESTful**: Comunicação entre front-end e back-end.
