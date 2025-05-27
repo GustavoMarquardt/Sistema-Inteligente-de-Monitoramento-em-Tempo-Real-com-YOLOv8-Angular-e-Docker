@@ -31,14 +31,15 @@ Todos os serviços do sistema são containerizados utilizando Docker, garantindo
 ---
 
 ## Estrutura do Repositório
-/
-├── backend/ # Código do backend em Python
-├── frontend/ # Código do frontend em Angular
-├── docker/ # Arquivos Docker para containerização
-├── docs/ # Documentação adicional
-├── datasets/ # Dados de treinamento e teste (se aplicável)
-├── README.md # Este arquivo
-└── LICENSE # Licença do projeto
+
+ ```
+ ├── GYM Back_end/ # Código do backend em Python
+ ├── GYM front/ # Código do frontend em Angular
+ ├── GYM mobile/ # Código do serviço Mobile em Flutter
+ ├── GYM modelo/ # Serviço de requisição para as camerâs e aplicação do modelo
+ ├── docker/ # Arquivos Docker para containerização
+ ├── README.md # Este arquivo └── LICENSE # Licença do projeto
+ ``` 
 
 
 ---
@@ -50,21 +51,6 @@ Todos os serviços do sistema são containerizados utilizando Docker, garantindo
 - Docker instalado na sua máquina
 - Node.js (para executar o frontend localmente, opcional)
 - Python 3.8+ (para executar o backend localmente, opcional)
-
-## Rodando separadamente
-
-<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-
-<!-- Backend Card -->
-<div style="border: 1px solid #ccc; border-radius: 8px; padding: 1rem; width: 300px;">
-  
-### Backend
-
-Para executar o backend em Python:
-
-```bash
-cd backend
-python main.py
 
 
 
